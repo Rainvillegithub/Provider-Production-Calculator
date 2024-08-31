@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Production Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .calculator {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            border-radius: 5px;
+            font-size: 18px;
+            display: none;
+        }
+        .cta {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Provider Production Calculator</h1>
+
+    <div class="calculator">
+        <label for="grossBillings">Gross Weekly Billings ($):</label>
+        <input type="number" id="grossBillings" placeholder="Enter gross billings" min="0">
+
+        <label for="hoursWorked">Number of Hours Worked:</label>
+        <input type="number" id="hoursWorked" placeholder="Enter hours worked" min="0">
+
+        <label for="hourlyRate">Provider's Hourly Rate ($):</label>
+        <input type="number" id="hourlyRate" placeholder="Enter hourly rate" min="0">
+
+        <button onclick="calculateProduction()">Calculate</button>
+
+        <div id="result">
+            <p id="hourlyProduction"></p>
+            <p id="targetProduction"></p>
+            <p id="productionComparison"></p>
+            <p id="reportText"></p>
+        </div>
+    </div>
+
+    <div class="cta">
+        <p>👋 Enhance Your Practice👋</p>
+        <p>👋 Enrich Your Life👋</p>
+    </div>
+
+    <script>
+    function calculateProduction() {
+        var grossBillings = parseFloat(document.getElementById('grossBillings').value);
+        var hoursWorked = parseFloat(document.getElementById('hoursWorked').value);
+        var hourlyRate = parseFloat(document.getElementById('hourlyRate').value);
+
+        if (grossBillings > 0 && hoursWorked > 0 && hourlyRate > 0) {
+            var hourlyProduction = grossBillings / hoursWorked;
+            var targetProduction = hourlyRate * 3;
+            var shortfall = targetProduction - hourlyProduction;
+            var margin = hourlyProduction - targetProduction;
+
+            document.getElementById('hourlyProduction').innerText = "Actual Hourly Production: $" + hourlyProduction.toFixed(2);
+            document.getElementById('targetProduction').innerText = "Target Hourly Production (3x Rate): $" + targetProduction.toFixed(2);
+
+            if (hourlyProduction < targetProduction) {
+                document.getElementById('productionComparison').innerText = "Shortfall: $" + shortfall.toFixed(2) + " per hour. Production is below the target.";
+            } else {
+                document.getElementById('productionComparison').innerText = "Margin: $" + margin.toFixed(2) + " per hour. Production meets or exceeds the target.";
+            }
+
+            var reportText = "Based on the data:\n";
+            reportText += "Your provider's actual hourly production is $" + hourlyProduction.toFixed(2) + " per hour.\n";
+            reportText += "The target production, based on the hourly rate, is $" + targetProduction.toFixed(2) + " per hour.\n";
+
+            if (hourlyProduction < targetProduction) {
+                reportText += "There is a shortfall of $" + shortfall.toFixed(2) + " per hour. Consider strategies to increase the provider's production or reevaluate compensation.";
+            } else {
+                reportText += "The provider is meeting or exceeding the production target. Keep up the good work!";
+            }
+
+            document.getElementById('reportText').innerText = reportText;
+            document.getElementById('result').style.display = 'block';
+
+            // Call to action
+            var ctaText = "Looking to optimize your practice further? ";
+            ctaText += "Contact us today for a personalized consultation. ";
+            ctaText += "We can help you enhance your practice, boost profitability, and enrich your professional life.";
+            document.querySelector('.cta').innerHTML = `<p>👋 Enhance Your Practice👋</p><p>${ctaText}</p><p>👋 Enrich Your Life👋</p>`;
+        } else {
+            alert("Please enter valid numbers for gross billings, hours worked, and hourly rate.");
+        }
+    }
+    </script>
+
+</body>
+</html>
