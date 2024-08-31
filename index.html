@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Provider Production Calculator</title>
+    <title>Provider Production Calculator with Vacation Pay</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -70,7 +70,7 @@
 </head>
 <body>
 
-    <h1>Provider Production Calculator</h1>
+    <h1>Provider Production Calculator with Vacation Pay</h1>
 
     <div class="calculator">
         <label for="grossBillings">Gross Weekly Billings ($):</label>
@@ -81,6 +81,9 @@
 
         <label for="hourlyRate">Provider's Hourly Rate ($):</label>
         <input type="number" id="hourlyRate" placeholder="Enter hourly rate" min="0">
+
+        <label for="vacationPay">Vacation Pay (%):</label>
+        <input type="number" id="vacationPay" placeholder="Enter vacation pay percentage" min="0" value="0">
 
         <button onclick="calculateProduction()">Calculate</button>
 
@@ -102,15 +105,18 @@
         var grossBillings = parseFloat(document.getElementById('grossBillings').value);
         var hoursWorked = parseFloat(document.getElementById('hoursWorked').value);
         var hourlyRate = parseFloat(document.getElementById('hourlyRate').value);
+        var vacationPayPercentage = parseFloat(document.getElementById('vacationPay').value) / 100;
 
-        if (grossBillings > 0 && hoursWorked > 0 && hourlyRate > 0) {
+        if (grossBillings > 0 && hoursWorked > 0 && hourlyRate > 0 && vacationPayPercentage >= 0) {
+            var vacationPay = hourlyRate * vacationPayPercentage;
+            var totalHourlyCompensation = hourlyRate + vacationPay;
             var hourlyProduction = grossBillings / hoursWorked;
-            var targetProduction = hourlyRate * 3;
+            var targetProduction = totalHourlyCompensation * 3;
             var shortfall = targetProduction - hourlyProduction;
             var margin = hourlyProduction - targetProduction;
 
             document.getElementById('hourlyProduction').innerText = "Actual Hourly Production: $" + hourlyProduction.toFixed(2);
-            document.getElementById('targetProduction').innerText = "Target Hourly Production (3x Rate): $" + targetProduction.toFixed(2);
+            document.getElementById('targetProduction').innerText = "Target Hourly Production (3x Rate + Vacation Pay): $" + targetProduction.toFixed(2);
 
             if (hourlyProduction < targetProduction) {
                 document.getElementById('productionComparison').innerText = "Shortfall: $" + shortfall.toFixed(2) + " per hour. Production is below the target.";
@@ -120,7 +126,7 @@
 
             var reportText = "Based on the data:\n";
             reportText += "Your provider's actual hourly production is $" + hourlyProduction.toFixed(2) + " per hour.\n";
-            reportText += "The target production, based on the hourly rate, is $" + targetProduction.toFixed(2) + " per hour.\n";
+            reportText += "The target production, based on the hourly rate plus vacation pay, is $" + targetProduction.toFixed(2) + " per hour.\n";
 
             if (hourlyProduction < targetProduction) {
                 reportText += "There is a shortfall of $" + shortfall.toFixed(2) + " per hour. Consider strategies to increase the provider's production or reevaluate compensation.";
@@ -137,7 +143,7 @@
             ctaText += "We can help you enhance your practice, boost profitability, and enrich your professional life.";
             document.querySelector('.cta').innerHTML = `<p>👋 Enhance Your Practice👋</p><p>${ctaText}</p><p>👋 Enrich Your Life👋</p>`;
         } else {
-            alert("Please enter valid numbers for gross billings, hours worked, and hourly rate.");
+            alert("Please enter valid numbers for gross billings, hours worked, hourly rate, and vacation pay.");
         }
     }
     </script>
